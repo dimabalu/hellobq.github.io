@@ -10,9 +10,15 @@
   this is b page!
 
   <script>
-    const bc = new BroadcastChannel('test channel')
-    bc.onmessage = function (e) {
-      console.log(e.data)
+    window.name = 'b.page'
+    window.onstorage = function (e) {
+      console.log('b', e)
+      const { currentTarget, target, srcElement } = e
+      console.log(
+        window === currentTarget,
+        window === target,
+        window === srcElement,
+      )
     }
   </script>
 </body>

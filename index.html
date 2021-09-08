@@ -11,18 +11,43 @@
 
 <body>
   <span>this is index page</span>
+  <button onclick="create()">新增</button>
+  <button onclick="modify()">修改</button>
+  <button onclick="del()">删除</button>
 
-  <iframe src="a.html" frameborder="0" onload="onLoad()"></iframe>
+  <iframe src="a.html" frameborder="0"></iframe>
 </body>
 
 <script>
-  function onLoad() {
-    const bc = new BroadcastChannel('test channel')
-    bc.postMessage('index')
-    bc.onmessage = function (e) {
-      console.log(e.data)
-    }
+  window.name = 'index.page'
+  window.onstorage = function (e) {
+    console.log('index', e)
   }
+
+  function random() {
+    return Math.random() * 100 | 0
+  }
+
+  function create() {
+    localStorage.setItem(random(), random())
+  }
+  function modify() {
+    localStorage.setItem(
+      Object.keys(localStorage).shift(), random()
+    )
+  }
+  function del() {
+    localStorage.removeItem(
+      Object.keys(localStorage).shift()
+    )
+  }
+
+
+  // let str = '', keys = []
+  // for (let i = 0; i < localStorage.length; ++i) {
+  //   keys.push(localStorage.key(i))
+  // }
+  // console.log('modify ---', Object.keys(localStorage) + '', keys + '')
 </script>
 
 </html>

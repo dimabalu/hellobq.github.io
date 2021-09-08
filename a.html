@@ -10,12 +10,27 @@
   this is a page!
 
   <script>
-    const bc = new BroadcastChannel('test channel')
-    setTimeout(() => bc.postMessage('a'), 1000)
-    bc.onmessage = function (e) {
-      console.log(e.data)
+    window.name = 'a.page'
+
+    const storageFromType = (e) => {
+      const { storageArea, key, newValue } = e
+      let isLocal = storageArea.length === localStorage.length && 
+        localStorage.getItem(key) === newValue
+      return isLocal ? 'localStorage' : 'sessionStorage'
     }
-    // bc.postMessage('this is a page!')
+
+    window.onstorage = function (e) {
+      console.log('a', e)
+      console.log(
+        storageFromType(e)
+      )
+    }
+    // localStorage.setItem('version', '1.0.1')
+
+    // setTimeout(() => window.location.href = 'b.html', 2000)
+    // setTimeout(() => {
+    //   window.parent.document.querySelector('iframe').src = 'b.html'
+    // }, 2000)
   </script>
 </body>
 </html>
