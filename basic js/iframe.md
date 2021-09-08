@@ -148,6 +148,26 @@ otherWindow.postMessage(message, targetOrigin, [transfer])
 </script>
 ```
 
+### 修改 iframe 的 src 不触发 onload 事件
+在 iframe 内修改 window.location.href，并不会触发 iframe 的 onload 事件：
+
+``` js
+btn.onclick = function() {
+  window.location.href = 'b.html' // 此时还是 <iframe src="a.html" frameborder="0"></iframe>
+}
+```
+
+如果该页面是被 iframe 嵌入，则需要父页面修改其 src。如果不是被 iframe 嵌入，直接修改 location.href 是有效的：
+
+``` js
+btn.onclick = function() {
+  const target = 'b.html'
+  window.parent === window
+    ? window.location.href = target
+    : window.parent.document.querySelect('iframe').src = target
+}
+```
+
 ### refs
 - [MDN iframe](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/iframe)
 - [3 Reasons You Might Not Want To Use Iframes](https://www.ostraining.com/blog/webdesign/against-using-iframes/)

@@ -1,5 +1,5 @@
 ## CORS
-`Cross Origin Resource Sharing` 跨域资源共享，允许跨源资源共享得以安全进行。浏览器一旦发觉当前请求属于 ajx 跨源请求，就会自动添加一些响应头信息，有时还会会附加的请求，但用户无感。
+`Cross Origin Resource Sharing` 跨域资源共享，允许跨源资源共享得以安全进行。浏览器一旦发觉当前请求属于 ajax 跨源请求，就会自动添加一些响应头信息，有时还会会附加的请求，但用户无感。
 
 什么情况下需要 CORS：
 - xhr/fetch 发起的跨站点 http 请求；
