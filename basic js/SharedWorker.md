@@ -66,13 +66,6 @@ onconnect = e => {
 }
 ```
 
-<video id="video" controls="" preload="none">
-  <source
-    src="mov/SharedWorker-demo.mov" 
-    type="video/mp4"
-  ></source>
-</video>
-
 ### 兼容性
 IE 不兼容，Safari 浏览器不兼容（Webkit 引擎限制），移动端浏览器不兼容：
 
