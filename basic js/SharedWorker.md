@@ -32,12 +32,12 @@ window.onbeforeunload = function() {
 ![查看-正在使用的SharedWorker列表.png](imgs/查看-正在使用的SharedWorker列表.png)
 
 点击 `terminate`: 终止此 `SharedWorker`。<br />
-点击 `inspect`: 打开 `ShareWorker` 的调试窗口。
+点击 `inspect`: 打开 `ShareWorker` 的调试窗口。在 worker.js 内所有的调试代码（如 `console`、`alert` 等都在调试窗口内展示）。
 
 ### ShareWorker 连接不同页面
-可通过监听 window 的 `connect` 方法，使得 `ShareWorker` 连接页面，回调函数的 `ports` 是页面连接 `ShareWorker` 的集合。
+可通过监听 window 的 `connect` 方法，使得 `ShareWorker` 连接不同页面，回调函数的 `ports` 是页面连接 `ShareWorker` 的集合。
 
-> 不同的页面，连接后产生的 port 不一样。ports 就是所有 port 的数组。
+> 不同的页面，连接后产生的 port 不一样。所以会产生 ports 数组。
 
 ``` js
 // worker.js
