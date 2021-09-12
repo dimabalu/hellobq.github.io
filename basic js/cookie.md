@@ -26,7 +26,7 @@
 ![cookie-原理.png](imgs/cookie-原理.png)
 
 ### cookie 属性
-**name**: 同域下的 cookie-name 不可相同，否则会覆盖前者。有两个特殊的 name：
+**name**: 同一个 domain 下的 cookie-name 不可相同，否则会覆盖前者。有两个特殊的 name：
 
 name|含义
 --|--
@@ -41,19 +41,24 @@ __Host- 前缀|以 __Host- 为前缀的 cookie，必须与 secure 属性一同�
 - 不可跨域，比如在 localhost:5000 下不可设置 domain 为 127.0.0.1:7001 站点下的 cookie。
 - 一级域名相同下的 cookie 可作用于二级域名，但是二级域名间不可交换使用。<br />比如：a.baidu.com 和 b.baidu.com 可使用 .baidu.com 域名下的 cookie，但 a.baidu.com 和 b.baidu.com 站点下的 cookie 不可相互使用。
 
-**path**: 设置 cookie 的作用路径（就是页面路由 pathname）。当用户访问 /spa 时，可使用 / 和 /spa 下的 cookie，但不能使用 /ssr 下的 cookie。
+**path**: 设置 cookie 的作用路径（就是页面路由 pathname）。
+
+场景|含义
+--|--
+设置 cookie 时，缺省 path|默认是当前页面的 pathname
+用户访问 /spa|可使用 / 和 /spa 下的 cookie，但不能使用 /ssr 下的 cookie。
 
 **expires/max-age**: 设置 cookie 的过期时间。默认是 session，浏览器会话结束（关闭浏览器）时。
   - expires 是一个时间点，单位**毫秒**； 
-  - max-age 是一个以**秒**为时间的时间段。max-age 可能的值：负数、0、正数。
+  - max-age 是一个以**秒**为时间的时间段。可能的值：负数、0、正数。
     值|含义
     --|--
     负数|有效期为 session
     0|删除 cookie
     正数|有效期为创建时刻 + 最大时间
 
-    例如，设置两年后过期：
     ``` js
+    // 两年后过期：
     const expires = new Date(Date.now() + 2 * 365 * 24 * 3600 * 1000).toGMTString()
     const maxAge = 2 * 365 * 24 * 3600;
     ```
@@ -73,3 +78,4 @@ __Host- 前缀|以 __Host- 为前缀的 cookie，必须与 secure 属性一同�
 ### cookie 优缺点
 
 ### refs
+- [MDN Set-Cookie](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Set-Cookie)
