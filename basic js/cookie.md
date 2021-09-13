@@ -26,7 +26,7 @@
 ![cookie-原理.png](imgs/cookie-原理.png)
 
 ### cookie 属性
-**name**: 同一个 domain 下的 cookie-name 不可相同，否则会覆盖前者。有两个特殊的 name：
+**name**: 同一 domain 且同一 path 下的 cookie-name 不可相同，否则会覆盖前者（三者相同）。有两个特殊的 name：
 
 name|含义
 --|--
@@ -46,7 +46,9 @@ __Host- 前缀|以 __Host- 为前缀的 cookie，必须与 secure 属性一同�
 场景|含义
 --|--
 设置 cookie 时，缺省 path|默认是当前页面的 pathname
+用户访问 /|只能使用 / 路径下的 cookie，不能使用子路径（/spa、/ssr）下的 cookie。
 用户访问 /spa|可使用 / 和 /spa 下的 cookie，但不能使用 /ssr 下的 cookie。
+在 / 路径下可设置 /spa 路径下的 cookie|能设置成功。但是 chrome 浏览器的 cookie 面板只显示作用于当前窗口的 cookie。firefox 浏览器的 cookie 面板上显示（不管 cookie 是否作用于当前路由）。
 
 **expires/max-age**: 设置 cookie 的过期时间。默认是 session，浏览器会话结束（关闭浏览器）时。
   - expires 是一个时间点，单位**毫秒**； 
@@ -62,6 +64,9 @@ __Host- 前缀|以 __Host- 为前缀的 cookie，必须与 secure 属性一同�
     const expires = new Date(Date.now() + 2 * 365 * 24 * 3600 * 1000).toGMTString()
     const maxAge = 2 * 365 * 24 * 3600;
     ```
+
+> 同时设置 max-age 和 expires 时，max-age 优先级更高。
+
 **secure**: 默认情况下，不管是 http、https 协议的请求都会把 cookie 发送到服务端。设置 secure 为 true 时，此时的 cookie 只能在 https 等安全协议下传输。
 > 注意：只有是在 https 安全协议下的 web 站点，才能设置 secure 的值。
 
@@ -74,8 +79,52 @@ __Host- 前缀|以 __Host- 为前缀的 cookie，必须与 secure 属性一同�
 ```
 
 ### cookie 设置、获取、删除
+``` js
+const doCookie = {
+  get: function(name) {
+    const urlSearchParams = new URLSearchParams(document.cookie.replace(/;\s/g, '&'))
+    return urlSearchParams.get(name)
+
+    /**
+     * 
+        var match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
+        return (match ? decodeURIComponent(match[3]) : null);
+     */
+  },
+  set: function({ name, value, domain, path, expires, maxAge, secure }) {
+    const anns = [
+      `${name}=${encodeURIComponent(value)}`
+    ]
+
+    if (typeof domain === 'string') anns.push(`domain=${domain}`)
+    if (typeof path === 'string') anns.push(`path=${path}`)
+    if (typeof expires === 'number') {
+      expires = new Date(Date.now() + expires).toGMTString()
+      anns.push(`expires=${expires}`)
+    }
+    typeof maxAge === 'number' && anns.push(`max-age=${maxAge}`)
+    secure === true && anns.push('secure')
+    
+    document.cookie = anns.join('; ')
+  },
+  delete: function(args) {
+    args.maxAge = 0
+    this.set(args)
+  }
+}
+```
 
 ### cookie 优缺点
+优点：
+- 扩展性和可用性较强
+- 加密技术得当且不存放敏感数据，减少破解的可能性。
+
+缺点：
+- 有数量（20 条）和长度限制（超出 4kb，会被裁掉）。
+- 安全性问题，要防范 cookie 拦截。
 
 ### refs
 - [MDN Set-Cookie](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Set-Cookie)
+- [XSS攻击之窃取Cookie](https://blog.fundebug.com/2017/08/16/xss_steal_cookie/)
+- [axios cookies.js](https://github1s.com/axios/axios/blob/HEAD/lib/helpers/cookies.js#L34-L36)
+- [Cookie 的优缺点](https://www.jianshu.com/p/0a8a4eed337f)
