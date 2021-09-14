@@ -87,8 +87,10 @@ const doCookie = {
 
     /**
      * 
-        var match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
-        return (match ? decodeURIComponent(match[3]) : null);
+        var match = document.cookie.match(
+          new RegExp('(^|\\s)' + name + '=([^;]*)')
+        );
+        return (match ? decodeURIComponent(match[2]) : null);
      */
   },
   set: function({ name, value, domain, path, expires, maxAge, secure }) {
