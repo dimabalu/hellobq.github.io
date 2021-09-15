@@ -1,4 +1,4 @@
-## click、dbClick
+## 区分 click、dbClick
 在 chrome 测试中，触发元素双击事件（dbClick）的同时会触发两次单击（click）事件：
 
 ``` html
